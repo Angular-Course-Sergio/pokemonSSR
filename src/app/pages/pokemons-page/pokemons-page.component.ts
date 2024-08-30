@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { PokemonListComponent } from "../../pokemons/components/pokemon-list/pokemon-list.component";
+import { CommonModule } from '@angular/common';
+import { PokemonListSkeletonComponent } from './ui/pokemon-list-skeleton/pokemon-list-skeleton.component';
+import { PokemonListComponent } from '../../pokemons/components/pokemon-list/pokemon-list.component';
 
 @Component({
   selector: 'app-pokemons-page',
   standalone: true,
-  imports: [PokemonListComponent],
+  imports: [CommonModule, PokemonListComponent, PokemonListSkeletonComponent],
   templateUrl: './pokemons-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
