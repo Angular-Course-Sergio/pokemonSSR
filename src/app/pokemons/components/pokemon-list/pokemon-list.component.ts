@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { CommonModule } from '@angular/common';
+import { Pokemon } from '../../interfaces';
 
 @Component({
   selector: 'pokemon-list',
@@ -9,4 +10,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './pokemon-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonListComponent {}
+export class PokemonListComponent {
+  public pokemons = input.required<Pokemon[]>();
+}

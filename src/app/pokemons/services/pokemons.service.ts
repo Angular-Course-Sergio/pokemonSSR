@@ -26,8 +26,7 @@ export class PokemonsService {
           }));
 
           return pokemons;
-        }),
-        tap(console.log)
+        })
       );
   }
 }
