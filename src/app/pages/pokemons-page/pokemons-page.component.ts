@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,11 +6,13 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PokemonListSkeletonComponent } from './ui/pokemon-list-skeleton/pokemon-list-skeleton.component';
+import { ActivatedRoute } from '@angular/router';
 import { PokemonListComponent } from '../../pokemons/components/pokemon-list/pokemon-list.component';
-import { PokemonsService } from '../../pokemons/services/pokemons.service';
 import { Pokemon } from '../../pokemons/interfaces/pokemon-interface';
+import { PokemonsService } from '../../pokemons/services/pokemons.service';
+import { PokemonListSkeletonComponent } from './ui/pokemon-list-skeleton/pokemon-list-skeleton.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -19,14 +22,26 @@ import { Pokemon } from '../../pokemons/interfaces/pokemon-interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class PokemonsPageComponent implements OnInit {
+  private route = inject(ActivatedRoute);
   private pokemonsService = inject(PokemonsService);
+
   public pokemons = signal<Pokemon[]>([]);
+  public currentPage = toSignal<number>(
+    this.route.queryParamMap.pipe(
+      map((params) => params.get('page') ?? '1'),
+      map((page) => (isNaN(+page) ? 1 : +page)),
+      map((page) => Math.max(1, page))
+    )
+  );
 
   ngOnInit(): void {
+    console.log(this.currentPage());
     this.loadPokemons();
   }
 
-  public loadPokemons(nextPage: number = 0) {
-    this.pokemonsService.loadPage(nextPage).subscribe(this.pokemons.set);
+  public loadPokemons(page: number = 0) {
+    const pageToLoad = this.currentPage()! + page;
+
+    this.pokemonsService.loadPage(pageToLoad).subscribe(this.pokemons.set);
   }
 }
