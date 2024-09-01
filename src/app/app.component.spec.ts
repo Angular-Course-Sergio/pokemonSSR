@@ -25,8 +25,8 @@ describe('AppComponent', () => {
           imports: [NavbarComponentMock],
         },
         remove: {
-          imports: [NavbarComponent]
-        }
+          imports: [NavbarComponent],
+        },
       })
       .compileComponents();
 
